@@ -22,25 +22,32 @@ public class MyEmail {
             }
         });
 
-        Message message = new MimeMessage(session);
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setSubject("email from my java program");
+
+            Address addressTo = new InternetAddress("otabekb595@gmail.com");
+            message.setRecipient(Message.RecipientType.TO, addressTo);
+
+            MimeMultipart multipart = new MimeMultipart();
+
+            MimeBodyPart attachment = new MimeBodyPart();
+            attachment.attachFile(new File("static/father.jpg.jpg"));
 
 
-        Address addressTo = new InternetAddress("junaidtak747@gmail.com");
-        message.setRecipient(Message.RecipientType.TO,addressTo);
 
-        MimeMultipart multipart = new MimeMultipart();
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent("<h1>Email from my cool program</h1>", "text/html");
 
-        MimeBodyPart attachment = new MimeBodyPart();
-        attachment.attachFile(new File("static/father.jpg.jpg"));
+            multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(attachment);
 
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent("Email from java program" , "text/html");
-        multipart.addBodyPart(messageBodyPart);
-        multipart.addBodyPart(attachment);
+            message.setContent(multipart);
 
-        message.setContent(multipart);
-
-        Transport.send(message);
+            Transport.send(message);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 }
